@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { supabase } from './supabaseClient';
 
 function AdminProducts() {
+  const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -183,7 +185,10 @@ function AdminProducts() {
               <p className="text-gray-600 mt-1">Manage your digital product inventory</p>
             </div>
             <div>
-              <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors flex items-center gap-2">
+              <button 
+                onClick={() => navigate('/admin/upload')}
+                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors flex items-center gap-2"
+              >
                 ➕ Add Product
               </button>
             </div>

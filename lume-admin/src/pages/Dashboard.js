@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import {
   FaImages,
@@ -10,6 +11,7 @@ import {
 } from 'react-icons/fa';
 
 function Dashboard() {
+  const navigate = useNavigate();
   const [stats, setStats] = useState({
     totalProducts: 0,
     totalDownloads: 0,
@@ -71,7 +73,10 @@ function Dashboard() {
               <p className="text-gray-600 text-lg">Welcome to your LumeStock admin dashboard</p>
             </div>
             <div className="flex flex-col sm:flex-row gap-3">
-              <button className="flex items-center justify-center px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105">
+              <button 
+                onClick={() => navigate('/admin/upload')}
+                className="flex items-center justify-center px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
+              >
                 <FaPlus className="mr-2" /> Add Product
               </button>
               <button className="flex items-center justify-center px-6 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors duration-200">
@@ -243,7 +248,10 @@ function Dashboard() {
               <FaPlus className="text-4xl text-blue-600 mb-4" />
               <h3 className="text-lg font-semibold text-gray-900 mb-2">Add New Product</h3>
               <p className="text-gray-600 text-sm mb-4">Upload and manage your digital products</p>
-              <button className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200">
+              <button 
+                onClick={() => navigate('/admin/upload')}
+                className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200"
+              >
                 Get Started
               </button>
             </div>
@@ -252,7 +260,10 @@ function Dashboard() {
               <FaImages className="text-4xl text-green-600 mb-4" />
               <h3 className="text-lg font-semibold text-gray-900 mb-2">Manage Products</h3>
               <p className="text-gray-600 text-sm mb-4">Edit, update, or remove existing products</p>
-              <button className="w-full px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200">
+              <button 
+                onClick={() => navigate('/admin/products')}
+                className="w-full px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200"
+              >
                 View Products
               </button>
             </div>
@@ -261,7 +272,10 @@ function Dashboard() {
               <FaDownload className="text-4xl text-yellow-600 mb-4" />
               <h3 className="text-lg font-semibold text-gray-900 mb-2">Bulk Upload</h3>
               <p className="text-gray-600 text-sm mb-4">Upload multiple products at once</p>
-              <button className="w-full px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors duration-200">
+              <button 
+                onClick={() => navigate('/admin/bulk-upload')}
+                className="w-full px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors duration-200"
+              >
                 Bulk Upload
               </button>
             </div>
