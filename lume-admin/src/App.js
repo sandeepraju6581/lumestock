@@ -9,8 +9,6 @@ import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import ProtectedRoute from './components/ProtectedRoute';
 import { initializeStorage } from './storageUtils';
-import './App.css';
-import './components/common.css';
 
 function App() {
   useEffect(() => {
@@ -35,10 +33,10 @@ function App() {
           path="/admin/dashboard"
           element={
             <ProtectedRoute>
-              <div className="admin-app">
+              <div className="flex min-h-screen bg-gray-50">
                 <AdminNavbar />
-                <div className="admin-content-wrapper">
-                  <main className="admin-main">
+                <div className="flex-1 ml-64 flex flex-col">
+                  <main className="flex-1 p-6">
                     <Dashboard />
                   </main>
                   <AdminFooter />
@@ -51,10 +49,10 @@ function App() {
           path="/"
           element={
             <ProtectedRoute>
-              <div className="admin-app">
+              <div className="flex min-h-screen bg-gray-50">
                 <AdminNavbar />
-                <div className="admin-content-wrapper">
-                  <main className="admin-main">
+                <div className="flex-1 ml-64 flex flex-col">
+                  <main className="flex-1 p-6">
                     <Navigate to="/admin/dashboard" replace />
                   </main>
                   <AdminFooter />
@@ -67,10 +65,10 @@ function App() {
           path="/admin/upload"
           element={
             <ProtectedRoute>
-              <div className="admin-app">
+              <div className="flex min-h-screen bg-gray-50">
                 <AdminNavbar />
-                <div className="admin-content-wrapper">
-                  <main className="admin-main">
+                <div className="flex-1 ml-64 flex flex-col">
+                  <main className="flex-1">
                     <AdminUpload />
                   </main>
                   <AdminFooter />
@@ -83,10 +81,10 @@ function App() {
           path="/admin/products"
           element={
             <ProtectedRoute>
-              <div className="admin-app">
+              <div className="flex min-h-screen bg-gray-50">
                 <AdminNavbar />
-                <div className="admin-content-wrapper">
-                  <main className="admin-main">
+                <div className="flex-1 ml-64 flex flex-col">
+                  <main className="flex-1 p-6">
                     <AdminProducts />
                   </main>
                   <AdminFooter />
@@ -99,10 +97,10 @@ function App() {
           path="/admin/bulk-upload"
           element={
             <ProtectedRoute>
-              <div className="admin-app">
+              <div className="flex min-h-screen bg-gray-50">
                 <AdminNavbar />
-                <div className="admin-content-wrapper">
-                  <main className="admin-main">
+                <div className="flex-1 ml-64 flex flex-col">
+                  <main className="flex-1 p-6">
                     <AdminBulkUpload />
                   </main>
                   <AdminFooter />

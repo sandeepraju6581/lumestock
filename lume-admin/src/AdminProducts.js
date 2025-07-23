@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from './supabaseClient';
-import './AdminProducts.css';
 
 function AdminProducts() {
   const [products, setProducts] = useState([]);
@@ -145,11 +144,11 @@ function AdminProducts() {
 
   if (loading) {
     return (
-      <div className="admin-products-page">
-        <div className="admin-products-loading">
-          <div className="loading-spinner">⏳</div>
-          <h3>Loading products...</h3>
-          <p>Please wait while we fetch your products</p>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center p-8">
+          <div className="text-6xl mb-4">⏳</div>
+          <h3 className="text-2xl font-semibold text-gray-800 mb-2">Loading products...</h3>
+          <p className="text-gray-600">Please wait while we fetch your products</p>
         </div>
       </div>
     );
@@ -157,340 +156,310 @@ function AdminProducts() {
 
   if (error) {
     return (
-      <div className="admin-products-page">
-        <div className="admin-products-error">
-          <div className="error-icon">❌</div>
-          <h3>Error Loading Products</h3>
-          <p>{error}</p>
-          <button onClick={fetchProducts} className="retry-btn">Try Again</button>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center p-8 bg-white rounded-lg shadow-lg max-w-md">
+          <div className="text-6xl mb-4">❌</div>
+          <h3 className="text-2xl font-semibold text-red-800 mb-2">Error Loading Products</h3>
+          <p className="text-gray-600 mb-6">{error}</p>
+          <button 
+            onClick={fetchProducts} 
+            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors"
+          >
+            Try Again
+          </button>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="admin-products-page">
-      {/* Top Bar */}
-      <nav className="admin-top-bar">
-        <div className="admin-top-bar-left">
-          <h1>🎨 LumeStock Admin</h1>
-        </div>
-        <div className="admin-top-bar-right">
-          <div className="search-bar">
-            <input
-              type="text"
-              className="search-input"
-              placeholder="Search products..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            <span className="search-icon">🔍</span>
-          </div>
-          <div className="admin-actions">
-            <a href="/admin/upload" className="add-product-btn">
-              <span>➕</span>
-              Add Product
-            </a>
-            <div className="admin-profile">
-              <button className="profile-button">
-                <span className="profile-icon">👤</span>
+    <div className="bg-gray-50 min-h-screen">
+      {/* Page Header */}
+      <div className="bg-white shadow-sm border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-6 py-6">
+          <div className="flex justify-between items-center">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">Products Management</h1>
+              <p className="text-gray-600 mt-1">Manage your digital product inventory</p>
+            </div>
+            <div>
+              <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors flex items-center gap-2">
+                ➕ Add Product
               </button>
             </div>
           </div>
         </div>
-      </nav>
-
-      {/* Stats Dashboard */}
-      <div className="stats-dashboard">
-        <div className="stat-card">
-          <div className="stat-icon">📦</div>
-          <div className="stat-content">
-            <div className="stat-info">
-              <h3>Total Products</h3>
-              <div className="number">{products.length}</div>
-              <div className="stat-trend">+{filteredProducts.length} filtered</div>
-            </div>
-          </div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-icon">🆓</div>
-          <div className="stat-content">
-            <div className="stat-info">
-              <h3>Free Products</h3>
-              <div className="number">{products.filter(p => p.license === 'free').length}</div>
-              <div className="stat-trend">{products.length > 0 ? ((products.filter(p => p.license === 'free').length / products.length) * 100).toFixed(1) : 0}% of total</div>
-            </div>
-          </div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-icon">💎</div>
-          <div className="stat-content">
-            <div className="stat-info">
-              <h3>Premium Products</h3>
-              <div className="number">{products.filter(p => p.license === 'premium').length}</div>
-              <div className="stat-trend">{products.length > 0 ? ((products.filter(p => p.license === 'premium').length / products.length) * 100).toFixed(1) : 0}% of total</div>
-            </div>
-          </div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-icon">💰</div>
-          <div className="stat-content">
-            <div className="stat-info">
-              <h3>Total Value</h3>
-              <div className="number">${getTotalRevenue().toFixed(2)}</div>
-              <div className="stat-trend">Avg: ${getAveragePrice().toFixed(2)}</div>
-            </div>
-          </div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-icon">📂</div>
-          <div className="stat-content">
-            <div className="stat-info">
-              <h3>Categories</h3>
-              <div className="number">{getUniqueCategories().length}</div>
-              <div className="stat-trend">Active categories</div>
-            </div>
-          </div>
-        </div>
       </div>
 
-      {/* Filters */}
-      <div className="filters-section">
-        <div className="filter-group">
-          <select
-            className="filter-select"
-            value={categoryFilter}
-            onChange={(e) => setCategoryFilter(e.target.value)}
-          >
-            <option value="">All Categories</option>
-            {getUniqueCategories().map(category => (
-              <option key={category} value={category}>{category}</option>
-            ))}
-          </select>
+      <div className="max-w-7xl mx-auto px-6 py-6 space-y-6">
+        {/* Search and Filter Bar */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
+            <div className="relative flex-1">
+              <input
+                type="text"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="Search products..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              <span className="absolute left-3 top-2.5 text-gray-400 text-lg">🔍</span>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <select
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent min-w-[150px]"
+                value={categoryFilter}
+                onChange={(e) => setCategoryFilter(e.target.value)}
+              >
+                <option value="">All Categories</option>
+                {getUniqueCategories().map(category => (
+                  <option key={category} value={category}>{category}</option>
+                ))}
+              </select>
+              <select
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent min-w-[150px]"
+                value={licenseFilter}
+                onChange={(e) => setLicenseFilter(e.target.value)}
+              >
+                <option value="">All Licenses</option>
+                <option value="free">Free</option>
+                <option value="premium">Premium</option>
+              </select>
+              <button 
+                className="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-2 px-4 rounded-lg transition-colors flex items-center gap-2"
+                onClick={() => {
+                  setSearchTerm('');
+                  setCategoryFilter('');
+                  setLicenseFilter('');
+                }}
+              >
+                🔄 Clear Filters
+              </button>
+            </div>
+          </div>
         </div>
-        <div className="filter-group">
-          <select
-            className="filter-select"
-            value={licenseFilter}
-            onChange={(e) => setLicenseFilter(e.target.value)}
-          >
-            <option value="">All Licenses</option>
-            <option value="free">Free</option>
-            <option value="premium">Premium</option>
-          </select>
-        </div>
-        <div className="filter-group">
-          <button
-            className="filter-select"
-            onClick={() => {
-              setSearchTerm('');
-              setCategoryFilter('');
-              setLicenseFilter('');
-            }}
-          >
-            🔄 Clear Filters
-          </button>
-        </div>
-      </div>
 
-      {/* Products Grid */}
-      <div className="products-container">
-        <div className="products-grid">
-          {filteredProducts.map(product => (
-            <div key={product.id} className="product-card">
-              <div className="product-thumbnail">
-                <img src={product.thumbnail} alt={product.title} />
-                <div className="product-overlay"></div>
-                <div className="product-license-badge">
-                  {product.license === 'free' ? '🆓' : '💎'} {product.license}
-                </div>
-                <div className="quick-actions">
-                  <button
-                    className="quick-action-btn"
-                    onClick={() => window.open(product.file_url, '_blank')}
-                    title="Download"
-                  >
-                    ⬇️
-                  </button>
-                  <button
-                    className="quick-action-btn"
-                    onClick={() => handleEdit(product)}
-                    title="Edit"
-                  >
-                    ✏️
-                  </button>
-                  <button
-                    className="quick-action-btn"
-                    onClick={() => handleDelete(product.id)}
-                    title="Delete"
-                  >
-                    🗑️
-                  </button>
-                </div>
+        {/* Stats Dashboard */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+            <div className="text-3xl font-bold text-blue-600 mb-2">{products.length}</div>
+            <div className="text-sm font-medium text-gray-900 mb-1">Total Products</div>
+            <div className="text-xs text-green-600">+{filteredProducts.length} filtered</div>
+          </div>
+          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+            <div className="text-3xl font-bold text-green-600 mb-2">{products.filter(p => p.license === 'free').length}</div>
+            <div className="text-sm font-medium text-gray-900 mb-1">Free Products</div>
+            <div className="text-xs text-gray-600">{products.length > 0 ? ((products.filter(p => p.license === 'free').length / products.length) * 100).toFixed(1) : 0}% of total</div>
+          </div>
+          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+            <div className="text-3xl font-bold text-purple-600 mb-2">{products.filter(p => p.license === 'premium').length}</div>
+            <div className="text-sm font-medium text-gray-900 mb-1">Premium Products</div>
+            <div className="text-xs text-gray-600">{products.length > 0 ? ((products.filter(p => p.license === 'premium').length / products.length) * 100).toFixed(1) : 0}% of total</div>
+          </div>
+          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+            <div className="text-3xl font-bold text-yellow-600 mb-2">${getTotalRevenue().toFixed(2)}</div>
+            <div className="text-sm font-medium text-gray-900 mb-1">Total Value</div>
+            <div className="text-xs text-gray-600">Avg: ${getAveragePrice().toFixed(2)}</div>
+          </div>
+          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+            <div className="text-3xl font-bold text-indigo-600 mb-2">{getUniqueCategories().length}</div>
+            <div className="text-sm font-medium text-gray-900 mb-1">Categories</div>
+            <div className="text-xs text-gray-600">Active categories</div>
+          </div>
+        </div>
+
+        {/* Products Section */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+          <div className="p-6 border-b border-gray-200">
+            <div className="flex justify-between items-center">
+              <h2 className="text-xl font-semibold text-gray-900">Products ({filteredProducts.length})</h2>
+              <button 
+                className="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-2 px-4 rounded-lg transition-colors flex items-center gap-2"
+                onClick={() => {
+                  setSearchTerm('');
+                  setCategoryFilter('');
+                  setLicenseFilter('');
+                }}
+              >
+                🔄 Clear Filters
+              </button>
+            </div>
+          </div>
+
+          <div className="p-6">
+            {loading ? (
+              <div className="text-center py-8">
+                <div className="text-gray-500">Loading products...</div>
               </div>
-              <div className="product-info">
-                <h4>{product.title}</h4>
-                <p className="product-description">{product.description}</p>
-                <div className="product-meta">
-                  <div className="product-price">
-                    {product.old_price && (
-                      <span className="old-price">${product.old_price}</span>
-                    )}
-                    <span className="new-price">${product.new_price}</span>
+            ) : error ? (
+              <div className="text-center py-8">
+                <div className="text-red-600">{error}</div>
+              </div>
+            ) : filteredProducts.length === 0 ? (
+              <div className="text-center py-8">
+                <div className="text-gray-500">No products found</div>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredProducts.map(product => (
+                  <div key={product.id} className="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow overflow-hidden">
+                    <div className="relative">
+                      <img 
+                        src={product.thumbnail} 
+                        alt={product.title}
+                        className="w-full h-48 object-cover"
+                      />
+                      <span className={`absolute top-3 right-3 px-2 py-1 rounded-full text-xs font-medium ${
+                        product.license === 'free' 
+                          ? 'bg-green-100 text-green-800' 
+                          : 'bg-purple-100 text-purple-800'
+                      }`}>
+                        {product.license === 'free' ? '🆓 Free' : '💎 Premium'}
+                      </span>
+                    </div>
+                    <div className="p-4">
+                      <h4 className="font-semibold text-gray-900 mb-2 text-lg">{product.title}</h4>
+                      <p className="text-gray-600 text-sm mb-4 line-clamp-2">{product.description}</p>
+                      <div className="flex justify-between items-center mb-4">
+                        <div className="flex items-center gap-2">
+                          {product.old_price && (
+                            <span className="text-gray-400 line-through text-sm">
+                              ${product.old_price}
+                            </span>
+                          )}
+                          <span className="font-semibold text-blue-600 text-lg">${product.new_price}</span>
+                        </div>
+                        <span className="bg-gray-100 text-gray-800 text-xs font-medium px-2 py-1 rounded-full">
+                          {product.category}
+                        </span>
+                      </div>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => window.open(product.file_url, '_blank')}
+                          className="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 px-3 rounded transition-colors flex items-center justify-center gap-1"
+                        >
+                          ⬇️ Download
+                        </button>
+                        <button
+                          onClick={() => handleEdit(product)}
+                          className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 text-sm font-medium py-2 px-3 rounded transition-colors flex items-center justify-center gap-1"
+                        >
+                          ✏️ Edit
+                        </button>
+                        <button
+                          onClick={() => handleDelete(product.id)}
+                          className="flex-1 bg-red-500 hover:bg-red-600 text-white text-sm font-medium py-2 px-3 rounded transition-colors flex items-center justify-center gap-1"
+                        >
+                          🗑️ Delete
+                        </button>
+                      </div>
+                    </div>
                   </div>
-                  <span className="product-category">{product.category}</span>
-                </div>
-                {product.tags && product.tags.length > 0 && (
-                  <div className="product-tags">
-                    {product.tags.slice(0, 3).map(tag => (
-                      <span key={tag} className="tag">{tag}</span>
-                    ))}
-                    {product.tags.length > 3 && (
-                      <span className="tag">+{product.tags.length - 3} more</span>
-                    )}
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Edit Modal */}
+        {showModal && editingProduct && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-lg max-w-md w-full max-h-[80vh] overflow-y-auto">
+              <div className="p-6">
+                <h2 className="text-2xl font-bold text-gray-900 mb-6">✏️ Edit Product</h2>
+                <form onSubmit={handleUpdate} className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Title</label>
+                    <input
+                      type="text"
+                      name="title"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      value={editingProduct.title}
+                      onChange={handleInputChange}
+                      required
+                    />
                   </div>
-                )}
-                <div className="product-actions">
-                  <a
-                    href={product.file_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="action-btn download-btn"
-                  >
-                    ⬇️ Download
-                  </a>
-                  <button
-                    onClick={() => handleEdit(product)}
-                    className="action-btn edit-btn"
-                  >
-                    ✏️ Edit
-                  </button>
-                  <button
-                    onClick={() => handleDelete(product.id)}
-                    className="action-btn delete-btn"
-                  >
-                    🗑️ Delete
-                  </button>
-                </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                    <textarea
+                      name="description"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      value={editingProduct.description}
+                      onChange={handleInputChange}
+                      required
+                      rows="3"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                    <input
+                      type="text"
+                      name="category"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      value={editingProduct.category}
+                      onChange={handleInputChange}
+                      required
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Old Price</label>
+                      <input
+                        type="number"
+                        name="old_price"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        value={editingProduct.old_price || ''}
+                        onChange={handleInputChange}
+                        step="0.01"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">New Price</label>
+                      <input
+                        type="number"
+                        name="new_price"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        value={editingProduct.new_price}
+                        onChange={handleInputChange}
+                        required
+                        step="0.01"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">License</label>
+                    <select
+                      name="license"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      value={editingProduct.license}
+                      onChange={handleInputChange}
+                      required
+                    >
+                      <option value="free">Free</option>
+                      <option value="premium">Premium</option>
+                    </select>
+                  </div>
+                  <div className="flex gap-4 pt-4">
+                    <button 
+                      type="submit" 
+                      className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
+                    >
+                      💾 Save Changes
+                    </button>
+                    <button 
+                      type="button" 
+                      onClick={() => setShowModal(false)} 
+                      className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2 px-4 rounded-lg transition-colors"
+                    >
+                      ❌ Cancel
+                    </button>
+                  </div>
+                </form>
               </div>
             </div>
-          ))}
-        </div>
-
-        {filteredProducts.length === 0 && (
-          <div className="no-products">
-            <div className="no-products-icon">📦</div>
-            <h3>No products found</h3>
-            <p>Try adjusting your filters or search terms</p>
           </div>
         )}
       </div>
-
-      {/* Edit Modal */}
-      {showModal && editingProduct && (
-        <div className="modal">
-          <div className="modal-content">
-            <h2>✏️ Edit Product</h2>
-            <form onSubmit={handleUpdate}>
-              <div className="modal-body">
-                <div>
-                  <label>Title</label>
-                  <input
-                    type="text"
-                    name="title"
-                    value={editingProduct.title}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </div>
-                <div className="full-width">
-                  <label>Description</label>
-                  <textarea
-                    name="description"
-                    value={editingProduct.description}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </div>
-                <div className="full-width">
-                  <label>Thumbnail URL</label>
-                  <input
-                    type="text"
-                    name="thumbnail"
-                    value={editingProduct.thumbnail}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </div>
-                <div className="full-width">
-                  <label>File URL</label>
-                  <input
-                    type="text"
-                    name="file_url"
-                    value={editingProduct.file_url}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </div>
-                <div>
-                  <label>License</label>
-                  <select
-                    name="license"
-                    value={editingProduct.license}
-                    onChange={handleInputChange}
-                    required
-                  >
-                    <option value="free">Free</option>
-                    <option value="premium">Premium</option>
-                  </select>
-                </div>
-                <div>
-                  <label>Old Price</label>
-                  <input
-                    type="number"
-                    name="old_price"
-                    value={editingProduct.old_price || ''}
-                    onChange={handleInputChange}
-                  />
-                </div>
-                <div>
-                  <label>New Price</label>
-                  <input
-                    type="number"
-                    name="new_price"
-                    value={editingProduct.new_price}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </div>
-                <div>
-                  <label>Category</label>
-                  <input
-                    type="text"
-                    name="category"
-                    value={editingProduct.category}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </div>
-                <div className="full-width">
-                  <label>Tags (comma-separated)</label>
-                  <input
-                    type="text"
-                    name="tags"
-                    value={editingProduct.tags}
-                    onChange={handleInputChange}
-                  />
-                </div>
-              </div>
-              <div className="modal-actions">
-                <button type="submit" className="save-btn">💾 Save Changes</button>
-                <button type="button" onClick={() => setShowModal(false)} className="cancel-btn">❌ Cancel</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

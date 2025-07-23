@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { supabase } from '../supabaseClient';
 import JSZip from 'jszip';
-import './AdminBulkUpload.css';
 
 function AdminBulkUpload() {
   const [zipFile, setZipFile] = useState(null);
@@ -189,20 +188,30 @@ function AdminBulkUpload() {
   };
 
   return (
-    <div className="admin-bulk-upload-page">
-      <div className="bulk-upload-container">
-        <h2>Bulk Upload Products</h2>
-        {message && (
-          <div className={message.startsWith('Error') ? 'admin-error' : 
-                         message.startsWith('Success') ? 'admin-success' : 
-                         'admin-info'}>
-            {message}
-          </div>
-        )}
+    <div className="min-h-screen bg-gray-50 p-6">
+      <div className="max-w-4xl mx-auto">
+        <div className="bg-white rounded-lg shadow-lg p-8">
+          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
+            Bulk Upload Products
+          </h2>
+          
+          {message && (
+            <div className={`mb-6 p-4 rounded-lg ${
+              message.startsWith('Error') 
+                ? 'bg-red-50 border border-red-200 text-red-800' 
+                : message.startsWith('Success') 
+                ? 'bg-green-50 border border-green-200 text-green-800' 
+                : 'bg-blue-50 border border-blue-200 text-blue-800'
+            }`}>
+              {message}
+            </div>
+          )}
 
-        <div className="json-format-info">
-          <h3>ZIP File Structure</h3>
-          <pre>
+          <div className="bg-gray-50 rounded-lg p-6 mb-8">
+            <h3 className="text-xl font-semibold text-gray-900 mb-4">
+              ZIP File Structure
+            </h3>
+            <pre className="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm">
 {`your-upload.zip/
   ├── products.json   # Required - Contains product information
   ├── images/        # Folder containing all images
@@ -229,41 +238,87 @@ function AdminBulkUpload() {
     "product_file": "files/file1.cdr"       // Required - Path to product file in ZIP
   }
 ]`}
-          </pre>
-        </div>
-
-        <div {...getRootProps({ className: `json-dropzone ${isDragActive ? 'active' : ''}` })}>
-          <input {...getInputProps()} />
-          <p>Drag & drop your ZIP file here, or click to select</p>
-          <small>Maximum file size: 50MB</small>
-        </div>
-
-        {zipFile && (
-          <div className="file-info">
-            <p>Selected file: {zipFile.name}</p>
-            <button className="remove-btn" onClick={() => setZipFile(null)}>Remove</button>
+            </pre>
           </div>
-        )}
 
-        {uploadProgress.total > 0 && (
-          <div className="upload-progress">
-            <div className="progress-bar">
-              <div 
-                className="progress-fill" 
-                style={{ width: `${(uploadProgress.current / uploadProgress.total) * 100}%` }}
-              />
+          <div 
+            {...getRootProps({ 
+              className: `border-2 border-dashed rounded-lg p-12 text-center cursor-pointer transition-all duration-300 ${
+                isDragActive 
+                  ? 'border-blue-500 bg-blue-50' 
+                  : 'border-gray-300 bg-gray-50 hover:border-gray-400 hover:bg-gray-100'
+              }`
+            })}
+          >
+            <input {...getInputProps()} />
+            <div className="flex flex-col items-center">
+              <svg className="w-16 h-16 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+              </svg>
+              <p className="text-lg font-medium text-gray-700 mb-2">
+                Drag & drop your ZIP file here, or click to select
+              </p>
+              <small className="text-gray-500">Maximum file size: 50MB</small>
             </div>
-            <p>{uploadProgress.current} of {uploadProgress.total} products uploaded</p>
           </div>
-        )}
 
-        <button 
-          className="upload-btn" 
-          onClick={handleUpload} 
-          disabled={!zipFile || uploading}
-        >
-          {uploading ? 'Uploading...' : 'Upload Products'}
-        </button>
+          {zipFile && (
+            <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-center justify-between">
+              <div className="flex items-center">
+                <svg className="w-6 h-6 text-green-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                <span className="text-green-800 font-medium">Selected file: {zipFile.name}</span>
+              </div>
+              <button 
+                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors duration-200"
+                onClick={() => setZipFile(null)}
+              >
+                Remove
+              </button>
+            </div>
+          )}
+
+          {uploadProgress.total > 0 && (
+            <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+              <div className="mb-2">
+                <div className="bg-gray-200 rounded-full h-3 overflow-hidden">
+                  <div 
+                    className="bg-gradient-to-r from-blue-500 to-purple-600 h-full transition-all duration-300 ease-out"
+                    style={{ width: `${(uploadProgress.current / uploadProgress.total) * 100}%` }}
+                  />
+                </div>
+              </div>
+              <p className="text-blue-800 font-medium text-center">
+                {uploadProgress.current} of {uploadProgress.total} products uploaded
+              </p>
+            </div>
+          )}
+
+          <div className="mt-8 text-center">
+            <button 
+              className={`px-8 py-3 rounded-lg font-semibold text-white transition-all duration-200 ${
+                !zipFile || uploading
+                  ? 'bg-gray-400 cursor-not-allowed'
+                  : 'bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 transform hover:scale-105 shadow-lg hover:shadow-xl'
+              }`}
+              onClick={handleUpload} 
+              disabled={!zipFile || uploading}
+            >
+              {uploading ? (
+                <div className="flex items-center">
+                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                  </svg>
+                  Uploading...
+                </div>
+              ) : (
+                'Upload Products'
+              )}
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

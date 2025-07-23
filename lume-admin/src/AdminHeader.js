@@ -1,5 +1,4 @@
 import React from 'react';
-import './AdminHeader.css';
 
 function AdminHeader() {
   return (
